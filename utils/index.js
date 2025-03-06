@@ -25,7 +25,10 @@ const selectDatePickerOption = async (page, { type, value }) => {
 
     // Click the option
     await page.click(`${selectorId} > a[${type[0]}="${value}"]`);
-    await page.screenshot({ path: `changed_${type}.jpg` });
 };
 
-module.exports = { ...puppeteerExtension, selectDatePickerOption }
+const formatNumber = (value, decimals = 2) => {
+    return Number(parseFloat(value).toFixed(decimals));
+};
+
+module.exports = { ...puppeteerExtension, selectDatePickerOption, formatNumber }

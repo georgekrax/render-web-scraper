@@ -1,3 +1,31 @@
+const { TimeoutError } = require("puppeteer-core");
+
+const INVERTER_SELECTORS = {
+  COOKIE_REJECT_BTN: "button#onetrust-reject-all-handler",
+  COOKIE_BANNER: "#onetrust-banner-sdk",
+  DATE_INPUT: "td input",
+  DATE_PICKER: "#basicDatePickerPopUp",
+  TABLE_ROW: "#ctl00_ContentPlaceHolder1_PublicPagePlaceholder1_PageUserControl_ctl00_UserControl0_DataGridOverview > tbody > tr",
+  TABLE_COLUMN_HEADING: "#ctl00_ContentPlaceHolder1_PublicPagePlaceholder1_PageUserControl_ctl00_UserControl0_DataGridOverview > tbody > tr.base-grid-header > td:nth-child(2) > a",
+  DATE_SELECTOR: (date) => {
+    const formattedDate = `${date.format("YYYY")}/${date.get("month")}/${date.format("D")}`;
+    return `a[d='${formattedDate}']`;
+  }
+};
+
+const handleCookieConsent = async (page) => {
+  try {
+    await page.waitForSelector(INVERTER_SELECTORS.COOKIE_REJECT_BTN, { visible: true, timeout: 500 });
+    await page.evaluate((selector) => document.querySelector(selector).click(), INVERTER_SELECTORS.COOKIE_REJECT_BTN);
+    await waitForCondition(page, {
+      selector: INVERTER_SELECTORS.COOKIE_BANNER,
+      toBeVisible: false
+    });
+  } catch (err) {
+    if (!(err instanceof TimeoutError)) throw err;
+  }
+}
+
 const waitForCondition = async (page, options) => {
   const { timeout = 10000, interval = 250, ...restOptions } = options;
   
@@ -8,26 +36,26 @@ const waitForCondition = async (page, options) => {
 
       const check = () => {
         const el = document.querySelector(params.selector);
-        if (!el) return;
+        let matchesText = false;
+        let isVisible = false;
+        console.log(matchesText, isVisible);
+
+        if (typeof params.toBeVisible !== "undefined" || params.toBeVisible != null) {
+          if (!el) isVisible = false;
+
+          const style = window.getComputedStyle(el);
+          isVisible = !(style.display === "none" || style.visibility === "hidden");
+        }
         
         if (params.expectedText) {
           // Check for text match
-          if (el.textContent.includes(params.expectedText)) {
-            clearTimeout(timeoutId);
-            resolve();
-            return;
-          }
-        } else if (params.expectedStyles) {
-          // Check for display: none
-          const style = window.getComputedStyle(el);
-          const allStylesMatch = Object.entries(params.expectedStyles)
-            .every(([property, value]) => style[property] === value);
+          if (el.textContent.includes(params.expectedText)) matchesText = true;
+        }
 
-          if (allStylesMatch) {
-            clearTimeout(timeoutId);
-            resolve();
-            return;
-          }
+        if (matchesText || isVisible === params.toBeVisible) {
+          clearTimeout(timeoutId);
+          resolve();
+          return;
         }
         
         if (Date.now() - start >= params.timeout) {
@@ -44,4 +72,4 @@ const waitForCondition = async (page, options) => {
   }, { ...restOptions, timeout, interval });
 };
 
-module.exports = { waitForCondition };
+module.exports = { INVERTER_SELECTORS, handleCookieConsent, waitForCondition };

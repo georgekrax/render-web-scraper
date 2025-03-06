@@ -3,7 +3,7 @@ const express = require('express');
 const puppeteer = require('puppeteer-core');
 const chromium = require('@sparticuz/chromium');
 
-const scrapeRouter = require('./api/scrape');
+const inverterProductionRouter = require('./api/inverter-daily-production');
 
 const app = express();
 const port = 3000;
@@ -25,11 +25,10 @@ const port = 3000;
     next();
   });
 
-  // Now, you can use scrapeRouter without directly passing the browser
-  app.use('/api', scrapeRouter);
+  app.use('/api', inverterProductionRouter);
 
   app.listen(port, () => {
-    console.log(`Example app listening at http://localhost:${port}`);
+    console.log(`App listening at http://localhost:${port}`);
   });
 
   // Handle server shutdown
