@@ -7,8 +7,8 @@ const router = express.Router();
 
 const NUMBER_OF_STRINGS = 3; // Strings per inverter
 
-router.get("/inverter-daily-production", async (req, res, next) => {
-  const { url, date: _date } = req.query;
+router.post("/inverter-daily-production", async (req, res, next) => {
+  const { url, date: _date } = req.body;
   if (!url) return next();
 
   const page = await req.browser.newPage();

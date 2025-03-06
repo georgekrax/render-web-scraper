@@ -25,6 +25,7 @@ const port = 3000;
     next();
   });
 
+  app.use(express.json());
   app.use('/api', inverterProductionRouter);
 
   app.listen(port, () => {
