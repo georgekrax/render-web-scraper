@@ -7,9 +7,12 @@ const router = express.Router();
 
 const NUMBER_OF_STRINGS = 3; // Strings per inverter
 
-router.post("/inverter-daily-production", async (req, res, next) => {
+router.post("/inverter-daily-production", async (req, res) => {
   const { url, date: _date } = req.body;
-  if (!url) return next();
+  console.log(_date);
+  if (!url) {
+    return res.status(400).send({ error: { message: "url is missing from the request body" } });
+  }
 
   const page = await req.browser.newPage();
   await page.goto(url, { waitUntil: "networkidle2" });
@@ -23,6 +26,7 @@ router.post("/inverter-daily-production", async (req, res, next) => {
   const _currentDate = await page.$eval(INVERTER_SELECTORS.DATE_INPUT, (el) => el.value);
   
   const date = moment(_date ? new Date(req.query.date) : undefined);
+  console.log(date.format("YYYY-MM-DD"));
   const currentDate = moment(new Date(_currentDate));
   
   if (date.isAfter(moment())) {
