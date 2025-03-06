@@ -9,7 +9,6 @@ const NUMBER_OF_STRINGS = 3; // Strings per inverter
 
 router.post("/inverter-daily-production", async (req, res) => {
   const { url, date: _date } = req.body;
-  console.log(_date);
   if (!url) {
     return res.status(400).send({ error: { message: "url is missing from the request body" } });
   }
@@ -25,8 +24,7 @@ router.post("/inverter-daily-production", async (req, res) => {
   await page.waitForSelector(INVERTER_SELECTORS.DATE_INPUT, { visible: true });
   const _currentDate = await page.$eval(INVERTER_SELECTORS.DATE_INPUT, (el) => el.value);
   
-  const date = moment(_date ? new Date(req.query.date) : undefined);
-  console.log(date.format("YYYY-MM-DD"));
+  const date = moment(_date ? new Date(_date) : undefined);
   const currentDate = moment(new Date(_currentDate));
   
   if (date.isAfter(moment())) {
