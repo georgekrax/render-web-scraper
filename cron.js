@@ -8,10 +8,8 @@ const job = new cron.CronJob("*/1 * * * *", () => {
 
     https
         .get(BACKEND_URL, (res) => {
-            if (res.status != 200) {
+            if (res.statusCode != 200) {
                 console.error(`Failed to restart server with status code: ${res.statusCode}`);
-            } else {
-                console.log("restarted server");
             }
         })
         .on("error", (err) => {
