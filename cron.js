@@ -3,7 +3,7 @@ const https = require("https");
 
 const BACKEND_URL = "https://render-web-scraper.onrender.com/api/keep-alive";
 
-const job = new cron.CronJob("*/1 * * * *", () => {
+const job = new cron.CronJob("*/14 * * * *", () => {
     console.log("Restarting server");
 
     https
