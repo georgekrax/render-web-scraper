@@ -1,7 +1,7 @@
 const cron = require("cron");
 const https = require("https");
 
-const BACKEND_URL = "https://web-scraper.onrender.com/api/keep-alive";
+const BACKEND_URL = "https://render-web-scraper.onrender.com/api/keep-alive";
 
 const job = new cron.CronJob("*/1 * * * *", () => {
     console.log("Restarting server");
