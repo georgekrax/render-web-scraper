@@ -3,10 +3,14 @@ const express = require('express');
 const puppeteer = require('puppeteer-core');
 const chromium = require('@sparticuz/chromium');
 
+const { job } = require("./cron");
 const inverterProductionRouter = require('./api/inverter-daily-production');
+const keepAliveRouter = require('./api/keep-alive');
 
 const app = express();
 const port = 3000;
+
+job.start();
 
 (async () => {
   let executablePath = process.env.CHROME_EXECUTABLE_PATH;
@@ -27,6 +31,7 @@ const port = 3000;
 
   app.use(express.json());
   app.use('/api', inverterProductionRouter);
+  app.use('/api', keepAliveRouter);
 
   app.listen(port, () => {
     console.log(`App listening at http://localhost:${port}`);
