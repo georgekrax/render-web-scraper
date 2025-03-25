@@ -6,6 +6,8 @@ const chromium = require('@sparticuz/chromium');
 const { job } = require("./cron");
 const inverterProductionRouter = require('./api/inverter-daily-production');
 const keepAliveRouter = require('./api/keep-alive');
+const aadeRentContractRouter = require('./api/aade-rent-contract');
+const govAuthenticationRouter = require('./api/gov-authentication');
 
 const app = express();
 const port = 3000;
@@ -32,6 +34,8 @@ job.start();
   app.use(express.json());
   app.use('/api', inverterProductionRouter);
   app.use('/api', keepAliveRouter);
+  app.use('/api', aadeRentContractRouter);
+  app.use('/api', govAuthenticationRouter);
 
   app.listen(port, () => {
     console.log(`App listening at http://localhost:${port}`);

@@ -1,4 +1,5 @@
 const puppeteerExtension = require("./puppeteer-extension");
+const constants = require("./constants");
 
 const selectDatePickerOption = async (page, { type, value }) => {
     // Click header to open selector (1 for month, 2 for year)
@@ -31,4 +32,4 @@ const formatNumber = (value, decimals = 2) => {
     return Number(parseFloat(value).toFixed(decimals));
 };
 
-module.exports = { ...puppeteerExtension, selectDatePickerOption, formatNumber }
+module.exports = { ...puppeteerExtension, ...constants, selectDatePickerOption, formatNumber }

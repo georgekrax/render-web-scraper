@@ -13,6 +13,22 @@ const INVERTER_SELECTORS = {
   }
 };
 
+const AADE_SELECTORS = {
+  NAVIGATION: {
+    CREATE_NEW_CONTRACT_BTN: "input[value='Επιλογή']",
+    LOGOUT_LINK: ".oriz_menu td:nth-child(9) > a"
+  },
+  CREATE_FORM: {
+    SUBMIT_BTN: "input[name='xxx_eventId_storeSubmission']",
+    TEMPORARY_SAVE_TEXT: "ΠΡΟΣΩΡΙΝΑ ΑΠΟΘΗΚΕΥΜΕΝΗ"
+  },
+  URL_INCLUDES: {
+    SUBMISSION_DETAILS: "displaySubmissionDetails",
+    LOGIN: "login",
+    SGSISAPPS: "sgsisapps"
+  }
+}
+
 const handleCookieConsent = async (page) => {
   try {
     await page.waitForSelector(INVERTER_SELECTORS.COOKIE_REJECT_BTN, { visible: true, timeout: 500 });
@@ -72,4 +88,4 @@ const waitForCondition = async (page, options) => {
   }, { ...restOptions, timeout, interval });
 };
 
-module.exports = { INVERTER_SELECTORS, handleCookieConsent, waitForCondition };
+module.exports = { INVERTER_SELECTORS, AADE_SELECTORS, handleCookieConsent, waitForCondition };
