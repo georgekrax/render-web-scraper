@@ -12,52 +12,55 @@ router.post("/create-aade-rent-contract", async (req, res) => {
 
     const allowSubLease = allow_sub_lease || false;
     const credentials = {
-        username: decrypt(_credentials.username),
-        password: decrypt(_credentials.password)
+        username: decrypt(_credentials.username, process.env.DECRYPTION_KEY),
+        password: decrypt(_credentials.password, process.env.DECRYPTION_KEY)
     }
 
-    // landlords = [
-    //     { taxId: "154901702", percentage: 25, ownership: "EPICARPIA" },
-    //     { taxId: "154901702", percentage: 25, ownership: "EPICARPIA" },
-    //     { taxId: "154901702", percentage: 25, ownership: "EPICARPIA" },
-    //     { taxId: "154901702", percentage: 25, ownership: "EPICARPIA" }
-    // ];
+    landlords = [
+        { taxId: "154901702", percentage: 25, ownership: "EPICARPIA" },
+        { taxId: "154901702", percentage: 25, ownership: "EPICARPIA" },
+        { taxId: "154901702", percentage: 25, ownership: "EPICARPIA" },
+        { taxId: "154901702", percentage: 25, ownership: "EPICARPIA" }
+    ];
 
-    // tenants = [
-    //     { taxId: "154901702"  }
-    // ]
+    tenants = [
+        { taxId: "154901702"  }
+    ]
 
-    // contract = {
-    //     type: "COMMERCIAL",
-    //     signed_date: "2025-12-16",
-    //     from: "2026-01-01",
-    //     to: "2026-12-21",
-    //     monthly_rent: 100
-    // };
+    contract = {
+        type: "COMMERCIAL",
+        signed_date: "2025-12-16",
+        from: "2026-01-01",
+        to: "2026-12-21",
+        monthly_rent: 100
+    };
 
-    // notes = "First sentence\nSecond sentence\nThird sentence";
+    notes = "First sentence\nSecond sentence\nThird sentence";
 
-    // property = {
-    //     type: "STORE",
-    //     description: "Description",
-    //     atak: "",
-    //     address_name: "ΠΑΤΡΙΑΡΧΟΥ ΙΩΑΚΕΙΜ",
-    //     address_number: 14,
-    //     postal_code: 54629,
-    //     kaek: "",
-    //     area: "ΘΕΣΣΑΛΟΝΙΚΗ",
-    //     district: " Θεσσαλονίκης",
-    //     floor_no: 0,
-    //     main_area_sq: 100,
-    //     extra_area_sq: 20,
-    //     elecricity_id: undefined,
-    //     energy_certificate: {
-    //         id: "91296",
-    //         created_date: "2016-05-10",
-    //         security_number: "FMMVC-605J8-K09VA-F"
-    //     }
-    // };
+    property = {
+        type: "STORE",
+        description: "Description",
+        atak: "",
+        address_name: "ΠΑΤΡΙΑΡΧΟΥ ΙΩΑΚΕΙΜ",
+        address_number: 14,
+        postal_code: 54629,
+        kaek: "",
+        area: "ΘΕΣΣΑΛΟΝΙΚΗ",
+        district: " Θεσσαλονίκης",
+        floor_no: 0,
+        main_area_sq: 100,
+        extra_area_sq: 20,
+        elecricity_id: undefined,
+        energy_certificate: {
+            id: "91296",
+            created_date: "2016-05-10",
+            security_number: "FMMVC-605J8-K09VA-F"
+        }
+    };
 
+    if (!credentials) {
+        return res.status(400).send({ error: { message: "`credentials` is missing from the request body" } });
+    }
     if (!landlords) {
         return res.status(400).send({ error: { message: "`landlords` is missing from the request body" } });
     }
